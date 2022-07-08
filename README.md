@@ -33,6 +33,22 @@ To install latest development version :
 
     pip install git+https://github.com/alexisjapas/napari-vesicles-segmentation.git
 
+## Usage
+1. Open napari
+2. Open your data
+![usage-open-data](images/usage-open-data.png)
+3. Launch the vesicles-segmentation plugin
+4. Select the data you want to segment and set the parameters of the segmentation
+![usage-setup](images/usage-setup.png)
+    * **image**: The image to segment vesicles in. The image can be a 2D or 3D temporal stack of images.
+    * **minimum vesicles size**: The minimum size of the vesicles to detect. Smaller detected vesicles are removed.
+    * **membrane erosion**: The size of the disk radius used for eroding the cell. This is used to remove the external membrane. This parameter scales when downsizing the image, for more information see 'downsizing ratio' parameter.
+    * **closing size**: The size of the disk radius used for closing the cell. This is used to fill holes in the cell. This parameter scales when downsizing the image, for more information see 'downsizing ratio' parameter.
+    * **clip**: If set to zero, no standardization is performed. Otherwise, the standard deviation of the image is set to n_sigma * the standard deviation of the image, the image is standardized and its values are clipped to the range [-1, 1] in order to remove outliers. The higher the value of n_sigma, the less outliers are removed. This operation can lead to a better detection of the cell.
+    * **downsampling ratio**: The downsampling ratio used for the downsampled image. This is used to speed up the computation. Downsampling the image have impact in reducing the resolution of erosion and closing e.g. for a downsize ratio of 2, setting the erosion size to 3 will result in an erosion size of 6.
+    * **display cell detection**: If set to True, the cell detection is displayed in the viewer instead of the vesicle detection.
+5. Click on the "Segment" button to start the segmentation. This can take few seconds or minutes depending on the size of the data. The result is added to the viewer as below.
+![usage-segmentation](images/usage-segmentation.png)
 
 ## Contributing
 
