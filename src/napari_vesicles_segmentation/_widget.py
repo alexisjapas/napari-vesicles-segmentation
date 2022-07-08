@@ -8,6 +8,7 @@ import skimage.morphology as morph
 from skimage import measure
 import scipy.ndimage as ndi
 import numpy as np
+from time import perf_counter
 
 
 def detect_cell(im: np.ndarray, membrane_erosion: int, closing_size: int, n_sigma: int, downsizing_ratio: int) -> np.ndarray:
@@ -91,6 +92,7 @@ class Segmentation(QWidget):
             This function performs the computation of the segmentation of the vesicles of the given image in a separate thread to avoid blocking the GUI.
             :return: A tuple containing the labels and the name of the label layer.
             """
+            start = perf_counter()
             ############################################################################################################
             #### Preprocessing
             ##################
@@ -133,6 +135,7 @@ class Segmentation(QWidget):
             ######################
             labels = measure.label(vesicles.astype(np.uint8).squeeze())
             labels_name = f"{image.name}_{'cell' if display_cell_detection else 'vesicle'}"
+            print(f"Segmentation of {image.name} took {perf_counter() - start:.2f} seconds.")
             return labels, labels_name
         _segment()
 
