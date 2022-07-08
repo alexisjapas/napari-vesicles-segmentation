@@ -1,14 +1,14 @@
-from napari_vesicles_segmentation import Segmentation2D
+from napari_vesicles_segmentation import Segmentation
 
 
 # make_napari_viewer is a pytest fixture that returns a napari viewer object
 # capsys is a pytest fixture that captures stdout and stderr output streams
-def test_Segmentation2D(make_napari_viewer, capsys):
+def test_Segmentation(make_napari_viewer, capsys):
     # make viewer and add an image layer using our fixture
     viewer = make_napari_viewer()
 
     # create our widget, passing in the viewer
-    my_widget = Segmentation2D(viewer)
+    my_widget = Segmentation(viewer)
 
     # # call our widget method
     # my_widget._on_click()

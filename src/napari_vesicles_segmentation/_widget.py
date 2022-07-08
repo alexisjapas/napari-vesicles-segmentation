@@ -1,5 +1,5 @@
 import napari
-from qtpy.QtWidgets import QWidget, QPushButton
+from qtpy.QtWidgets import QWidget, QVBoxLayout
 from napari.layers import Image
 from napari.qt.threading import thread_worker
 from magicgui import magicgui
@@ -42,14 +42,29 @@ def detect_cell(im: np.ndarray, membrane_erosion: int, closing_size: int, n_sigm
     return transform.resize(cell.astype(np.uint8), (im.shape[1], im.shape[0]), anti_aliasing=False) > 0
 
 
-class Segmentation2D(QWidget):
+class Segmentation(QWidget):
     # Constructor
     def __init__(self, viewer: napari.Viewer):
         super().__init__()
         self.viewer = viewer
-
-    # Segmentation method
-    def segment(self, image: Image, min_size: int= 0, membrane_erosion: int=0, closing_size: int=0, n_sigma: int=3, downsizing_ratio: int=1, display_cell_detection: bool=False):
+        layout = QVBoxLayout()
+        self.viewer.layers.events.inserted.connect(self.segment.reset_choices)
+        self.viewer.layers.events.removed.connect(self.segment.reset_choices)
+        layout.addWidget(self.segment.native)
+        self.setLayout(layout)
+        
+    
+    @magicgui(call_button='Run segmentation',
+              min_size={'label': 'minimum vesicles size'},
+              n_sigma={'label': 'clip[std]'},
+              downsizing_ratio={'min': 1}) 
+    def segment(self, image: Image,
+                min_size: int= 0,
+                membrane_erosion: int=3,
+                closing_size: int=0,
+                n_sigma: int=3,
+                downsizing_ratio: int=4,
+                display_cell_detection: bool=False):
         """
         This function segments vesicles in the image by detecting the cell and then detecting the vesicles.
         The cell is detected using the Otsu thresholding method. The external membrane is removed by closing, filling holes and eroding the detected cell. For faster computation, these operations can be performed in a downsampled image.
@@ -127,9 +142,8 @@ if __name__ == "__main__":
     viewer = napari.Viewer()
 
     # Adds segmentation widget to the viewer
-    segmentator = Segmentation2D(viewer)
-    segmentationWidget = magicgui(segmentator.segment, call_button="Segment", min_size={'label': 'minimum vesicles size'}, n_sigma={'label': 'clip[std]'}, downsizing_ratio={'min': 1})
-    viewer.window.add_dock_widget(segmentationWidget, name="Vesicles segmentation", add_vertical_stretch=True)
+    segmentator = Segmentation(viewer)
+    viewer.window.add_dock_widget(segmentator, name="Vesicles segmentation", add_vertical_stretch=True)
 
     # Run napari
     napari.run()

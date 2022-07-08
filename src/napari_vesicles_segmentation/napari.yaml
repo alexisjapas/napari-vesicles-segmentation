@@ -3,7 +3,7 @@ display_name: Vesicles Segmentation
 contributions:
   commands:
     - id: napari-vesicles-segmentation.make_qwidget
-      python_name: napari_vesicles_segmentation._widget:Segmentation2D
+      python_name: napari_vesicles_segmentation._widget:Segmentation
       title: Make segmentation widget
   widgets:
     - command: napari-vesicles-segmentation.make_qwidget
