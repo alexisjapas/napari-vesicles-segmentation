@@ -1,4 +1,5 @@
 import napari
+from qtpy.QtWidgets import QWidget, QPushButton
 from napari.layers import Image
 from napari.qt.threading import thread_worker
 from magicgui import magicgui
@@ -41,7 +42,7 @@ def detect_cell(im: np.ndarray, membrane_erosion: int, closing_size: int, n_sigm
     return transform.resize(cell.astype(np.uint8), (im.shape[1], im.shape[0]), anti_aliasing=False) > 0
 
 
-class Segmentation2D():
+class Segmentation2D(QWidget):
     # Constructor
     def __init__(self, viewer: napari.Viewer):
         super().__init__()
