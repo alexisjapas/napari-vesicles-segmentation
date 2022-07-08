@@ -72,11 +72,11 @@ class Segmentation(QWidget):
         This function adds the detected vesicles or the detected cell (set in the display_cell_detection parameter) to the viewer.
         :param image: The image to segment vesicles in. The image can be a 2D or 3D temporal stack of images.
         :param min_size: The minimum size of the vesicles to detect. Smaller detected vesicles are removed.
-        :param membrane_erosion: The size of the disk radius used for eroding the cell. This is used to remove the external membrane. This parameter scales when downsizing the image, for more information see 'downsizing_ratio' parameter.
-        :param closing_size: The size of the disk radius used for closing the cell. This is used to fill holes in the cell. This parameter scales when downsizing the image, for more information see 'downsizing_ratio' parameter.
-        :param n_sigma: If set to zero, no standardization is performed. Otherwise, the standard deviation of the image is set to n_sigma * the standard deviation of the image, the image is standardized and its values are clipped to the range [-1, 1] in order to remove outliers. The higher the value of n_sigma, the less outliers are removed. This operation can lead to a better detection of the cell.
-        :param downsizing_ratio: The downsampling ratio used for the downsampled image. This is used to speed up the computation. Downsampling the image have impact in reducing the resolution of erosion and closing e.g. for a downsize ratio of 2, setting the erosion size to 3 will result in an erosion size of 6.
-        :param display_cell_detection: If set to True, the cell detection is displayed in the viewer instead of the vesicle detection.
+        :param membrane_erosion: Amount of pixels to erode the cell. Changing downsizing scales this parameter.
+        :param closing_size: Cell clozing disk radius. Changing downsizing scales this parameter.
+        :param n_sigma: If zero, no clip is performed. Otherwise, the higher the value, the less outliers are removed.
+        :param downsizing_ratio: This is used to speed up the computation. Downsampling the image have impact in reducing the resolution of erosion and closing e.g. for a downsize ratio of 2, setting the erosion size to 3 will result in an erosion size of 6.
+        :param display_cell_detection: If set to True, display the detected cell instead of vesicles.
         """
         def _add_labels(labels: tuple):
             """
