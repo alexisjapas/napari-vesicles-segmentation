@@ -81,10 +81,13 @@ class Segmentation(QWidget):
         """
         def _add_labels(labels: tuple):
             """
-            This function adds the labels to the viewer. It is used as a callback function for the thread_worker. The labels in the first element of the tuple are added to the viewer as a label layer with the given name in the second element of the tuple.
+            This function adds the labels to the viewer. If the layer already exists, it is updated.It is used as a callback function for the thread_worker. The labels in the first element of the tuple are added to the viewer as a label layer with the given name in the second element of the tuple.
             :param labels: A tuple containing the labels and the name of the layer.
             """
-            self.viewer.add_labels(labels[0], name=labels[1])
+            if labels[1] in self.viewer.layers:
+                self.viewer.layers[labels[1]].data = labels[0]
+            else:
+                self.viewer.add_labels(labels[0], name=labels[1])
 
         @thread_worker(connect={"returned": _add_labels})
         def _segment():
