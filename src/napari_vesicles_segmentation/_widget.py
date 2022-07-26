@@ -1,4 +1,3 @@
-import napari
 from qtpy.QtWidgets import QWidget, QVBoxLayout
 from napari.layers import Image
 from napari.qt.threading import thread_worker
@@ -45,7 +44,7 @@ def detect_cell(im: np.ndarray, membrane_erosion: int, closing_size: int, n_sigm
 
 class Segmentation(QWidget):
     # Constructor
-    def __init__(self, viewer: napari.Viewer):
+    def __init__(self, viewer):
         super().__init__()
         self.viewer = viewer
         layout = QVBoxLayout()
@@ -138,13 +137,16 @@ class Segmentation(QWidget):
             #### Return the result
             ######################
             labels = measure.label(vesicles.astype(np.uint8).squeeze())
-            labels_name = f"{image.name}_{'cell' if display_cell_detection else 'vesicle'}"
+            labels_name = f"{image.name}_{'cell' if display_cell_detection else 'vesicles'}"
             print(f"Segmentation of {image.name} took {perf_counter() - start:.2f} seconds.")
             return labels, labels_name
+        
+        #self.image_name = image.name
         _segment()
 
 
 if __name__ == "__main__":
+    import napari
     # Creates a viewer
     viewer = napari.Viewer()
 
