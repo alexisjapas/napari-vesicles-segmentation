@@ -100,8 +100,9 @@ class Segmentation(QWidget):
             #### Preprocessing
             ##################
             # If the image is single, convert it to a stack with a single slice
+            ...
             if len(image.data.shape) == 2:
-                stack = np.extend(image.data, axis=0)
+                stack = np.expand_dims(image.data, axis=0)
             else:
                 stack = image.data
             # Normalize the image data between 0 and 1
